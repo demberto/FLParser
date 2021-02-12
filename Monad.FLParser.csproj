@@ -29,20 +29,33 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutomationData.cs" />
     <Compile Include="AutomationKeyframe.cs" />
     <Compile Include="Channel.cs" />
+    <Compile Include="ChannelEnvelopeLfo.cs" />
+    <Compile Include="ChannelFilter.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="FlParseException.cs" />
+    <Compile Include="GeneratorReverb.cs" />
     <Compile Include="IChannelData.cs" />
     <Compile Include="Insert.cs" />
     <Compile Include="InsertSlot.cs" />
     <Compile Include="IPlaylistItem.cs" />
+    <Compile Include="LayerData.cs" />
+    <Compile Include="ProjectWriter.cs" />
+    <Compile Include="TimeMarker.cs" />
     <Compile Include="Track.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="Pattern.cs" />
@@ -54,6 +67,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GeneratorData.cs" />
     <Compile Include="ChannelPlaylistItem.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Key.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

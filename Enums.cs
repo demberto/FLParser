@@ -4,14 +4,13 @@ namespace Monad.FLParser
 {
     public static class Enums
     {
-
         public enum Event
         {
-            Byte = 0,
-            ByteEnabled = 0,
+            ByteChanEnabled = 0,
+            Byte = ByteChanEnabled,
             ByteNoteOn = 1,
-            ByteVol = 2,
-            BytePan = 3,
+            ByteChanVol = 2,    // Obsolete
+            ByteChanPan = 3,    // Obsolete
             ByteMidiChan = 4,
             ByteMidiNote = 5,
             ByteMidiPatch = 6,
@@ -29,17 +28,26 @@ namespace Monad.FLParser
             ByteUseLoopPoints = 19,
             ByteLoopType = 20,
             ByteChanType = 21,
-            ByteMixSliceNum = 22,
-            ByteEffectChannelMuted = 27,
+            ByteChanMixerTrack = 22,
+            ByteSsLength = 25,
+            ByteSsLoop = 26,
+            ByteEffectProperties = 27,
+            ByteAPDC = 29,
             BytePlayTruncatedNotes = 30,
+            ByteEEAutoMode = 31,
+            ByteTimeMarkerNumo = 33,
+            ByteTimeMarkerDeno = 34,
+            // 36
+            // 37
+            // 38
 
             Word = 64,
             WordNewChan = Word,
             WordNewPat = Word + 1,
-            WordTempo = Word + 2,
+            WordTempo = Word + 2,   // Obsolete
             WordCurrentPatNum = Word + 3,
             WordPatData = Word + 4,
-            WordFx = Word + 5,
+            WordEq = Word + 5,
             WordFadeStereo = Word + 6,
             WordCutOff = Word + 7,
             WordDotVol = Word + 8,
@@ -54,18 +62,23 @@ namespace Monad.FLParser
             WordRandChan = Word + 17,
             WordMixChan = Word + 18,
             WordResonance = Word + 19,
-            WordLoopBar = Word + 20,
-            WordStDel = Word + 21,
-            WordFx3 = Word + 22,
+            WordLoopBar = Word + 20,    // Obsolete
+            WordStereoDelay = Word + 21,
+            WordPogo = Word + 22,
             WordDotReso = Word + 23,
             WordDotCutOff = Word + 24,
-            WordShiftDelay = Word + 25,
-            WordLoopEndBar = Word + 26,
+            WordShiftTime = Word + 25,
+            WordLoopEndBar = Word + 26, // Obsolete
             WordDot = Word + 27,
             WordDotShift = Word + 28,
-            WordLayerChans = Word + 30,
+            WordFineTempo = Word +29, // Obsolete
+            WordLayerParentOf = Word + 30,
             WordInsertIcon = Word + 31,
+            WordDotRel = Word + 32,
+            WordSwingMix = Word + 33,   
             WordCurrentSlotNum = Word + 34,
+            // 99
+            // 100
 
             Int = 128,
             DWordColor = Int,
@@ -73,21 +86,32 @@ namespace Monad.FLParser
             DWordEcho = Int + 2,
             DWordFxSine = Int + 3,
             DWordCutCutBy = Int + 4,
-            DWordWindowH = Int + 5,
+            DWordWindowHeight = Int + 5,
+            DWordWindowWidth = Int + 6,
             DWordMiddleNote = Int + 7,
             DWordReserved = Int + 8,
             DWordMainResoCutOff = Int + 9,
-            DWordDelayReso = Int + 10,
-            DWordReverb = Int + 11,
+            DWordDelayModXY = Int + 10,
+            DWordGenReverb = Int + 11,
             DWordIntStretch = Int + 12,
-            DWordSsNote = Int + 13,
+            DWordSsNote = Int + 13,     // SimSynth patch middle note
             DWordFineTune = Int + 14,
+            DWordLayerFlags = Int + 16,
+            DWordChannelFilterNum = Int + 17,
+            DWordChannelFilterCurrentNum = Int + 18,
+            DWordMixerOutput = Int + 19,
+            DWordTimeMarker = Int + 20,
             DWordInsertColor = Int + 21,
+            DWordPatternColor = Int + 22,
+            DWordSongLoopPos = Int + 24,
+            DWordAUSampleRate = Int + 25,
+            DWordMixerInput = Int + 26,
+            DWordPluginIcon = Int + 27,
             DWordFineTempo = Int + 28,
 
             Undef = 192,
             Text = Undef,
-            TextChanName = Text,
+            TextDefaultChanName = Text,    // Obsolete
             TextPatName = Text + 1,
             TextTitle = Text + 2,
             TextComment = Text + 3,
@@ -95,38 +119,53 @@ namespace Monad.FLParser
             TextUrl = Text + 5,
             TextCommentRtf = Text + 6,
             TextVersion = Text + 7,
-            GeneratorName = Text + 9,
+            TextRegName = Text + 8,     
+            TextPluginDefName = Text + 9,
+            TextDataPath = Text + 10,   
             TextPluginName = Text + 11,
             TextInsertName = Text + 12,
+            TextTimeMarkerName = Text + 13,
             TextGenre = Text + 14,
             TextAuthor = Text + 15,
             TextMidiCtrls = Text + 16,
-            TextDelay = Text + 17,
+            TextChanFilterName = Text + 39,
+            TextTrackName = Text + 47,
 
-            Data = 210,
-            DataTs404Params = Data,
-            DataDelayLine = Data + 1,
-            DataNewPlugin = Data + 2,
-            DataPluginParams = Data + 3,
-            DataChanParams = Data + 5,
-            DataEnvLfoParams = Data + 8,
-            DataBasicChanParams = Data + 9,
-            DataOldFilterParams = Data + 10,
-            DataOldAutomationData = Data + 13,
-            DataPatternNotes = Data + 14,
-            DataInsertParams = Data + 15,
-            DataAutomationChannels = Data + 17,
-            DataChanGroupName = Data + 21,
-            DataPlayListItems = Data + 23,
-            DataAutomationData = Data + 24,
-            DataInsertRoutes = Data + 25,
-            DataInsertFlags = Data + 26,
-            DataSaveTimestamp = Data + 27
+            DataChannelDelay = 209,
+            Data = DataChannelDelay,
+            DataTs404Params = Data + 1,
+            DataDelayLine = Data + 2,   // Obsolete
+            DataNewPlugin = Data + 3,   // 13 DWORDs, VST & obsolete DirectX
+            DataPluginParams = Data + 4,
+            DataChanParams = Data + 6,      // VST don't have this
+            DataPlaylistSelection = Data + 8,
+            DataEnvLfoParams = Data + 9,    // 17 DWORDs, reverse ADSR/LFO fields
+            DataBasicChanParams = Data + 10,
+            DataOldFilterParams = Data + 11,
+            DataChanPolyphony = Data + 12,
+            DataOldAutomationData = Data + 14,
+            DataPatternNotes = Data + 15,
+            DataInsertParams = Data + 16,
+            DataAutomationChannels = Data + 18,
+            DataChanTracking = Data + 19,   // Vol & Key Tracking use same event, first Vol event occurs
+            DataChanLevelOffsets = Data + 20,
+            DataPlayListItems = Data + 24,
+            DataAutomationData = Data + 25,
+            DataInsertRoutes = Data + 26,
+            DataInsertFlags = Data + 27,
+            DataSaveTimestamp = Data + 28,
+            DataPlaylistTrackInfo = Data + 29
         }
 
         public enum PluginType
         {
             Vst = 8
+        }
+
+        public enum ChannelReverbType
+        {
+            A = 0,
+            B = 65536
         }
 
         /*public enum FilterType
@@ -166,6 +205,22 @@ namespace Monad.FLParser
             NumTargets = 3
         }*/
 
+        public enum ChannelLfoShape: byte
+        {
+            Sine = 0,
+            Triangle = 1,
+            Pulse = 2
+        }
+
+        [Flags]
+        public enum ChannelEnvLfoFlags : byte
+        {
+            None = 0,
+            EnvTempo = 1 << 0,
+            LfoTempo = 1 << 1,
+            LfoGlobal = 1 << 5
+        }
+
         public enum PluginChunkId
         {
             Midi = 1,
@@ -178,15 +233,16 @@ namespace Monad.FLParser
             Guid = 52,
             State = 53,
             Name = 54,
-            Filename = 55,
+            Filename = 55,  // Personal info: actual location of author's plugin folder, not required actually
             VendorName = 56
         }
 
         public enum InsertParam
         {
-            SlotState = 0x00,
+            SlotEnabled = 0x00,
             SlotVolume = 0x01,
             SlotDryWet = 0x02,
+            SendLevelToTrack = 0x40,
             Volume = 0xC0,
             Pan = 0xC1,
             StereoSep = 0xC2,
@@ -202,7 +258,7 @@ namespace Monad.FLParser
         }
 
         [Flags]
-        public enum InsertFlags
+        public enum InsertFlags : ushort
         {
             ReversePolarity = 1,
             SwapChannels = 1 << 1,
@@ -221,5 +277,37 @@ namespace Monad.FLParser
             Unknown15 = 1 << 14,
             Unknown16 = 1 << 15
         }
+
+        [Flags]
+        public enum PolyphonyFlags : byte
+        {
+            None = 0x00,
+            Mono = 0x01,
+            Porta = 0x02,
+            U1 = 0x04,
+            U2 = 0x08,
+            U3 = 0x10,
+            U4 = 0x20,
+            U5 = 0x40,
+            U6 = 0x80
+        }
+
+        public enum ChannelType : byte
+        {
+            Sampler = 0,
+            Plugin = 2,
+            Layer = 3,
+            Audio = 4,
+            Automation = 5
+        }
+
+        [Flags]
+        public enum SamplerFXFlags : ushort
+        {
+            Clip = 1 << 2
+        }
+
+        // [Flags]
+        // public enum LayerFlags : byte { }
     }
 }
